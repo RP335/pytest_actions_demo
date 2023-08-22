@@ -36,6 +36,10 @@ jobs:
         run: |
           pytest
 
+      - name: Install requests module
+        run: |
+          pip install requests
+      
       - name: Create GitHub Issue on Test Failure
         if: ${{ failure() }}
         run: python create_issue.py
