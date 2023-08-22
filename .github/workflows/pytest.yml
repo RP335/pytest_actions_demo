@@ -5,8 +5,7 @@ on: push
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+    runs-on: windows-latest
 
     steps:
       - name: Check out repository code
@@ -34,3 +33,18 @@ jobs:
       - name: Run test suite
         run: |
           pytest
+
+      - name: Create GitHub Issue
+        run: |
+          $url = "https://api.github.com/repos/${{ github.repository }}/issues"
+          $headers = @{
+            "Authorization" = "Bearer $env:GITHUB_TOKEN"
+            "Content-Type" = "application/json"
+          }
+          $body = @{
+            title = "Test Results"
+            body = "Test results are available."
+            labels = @("pytest")
+          } | ConvertTo-Json
+          
+          Invoke-RestMethod -Uri $url -Headers $headers -Method Post -Body $body
