@@ -34,6 +34,7 @@ jobs:
           pytest
 
       - name: Create GitHub Issue
+        shell: powershell
         run: |
           $url = "https://api.github.com/repos/${{ github.repository }}/issues"
           $headers = @{
