@@ -35,18 +35,7 @@ jobs:
       - name: Run test suite
         run: |
           pytest
+
       - name: Create GitHub Issue on Test Failure
         if: ${{ failure() }}
-        run: |
-          $url = "https://api.github.com/repos/${{ github.repository }}/issues"
-          $headers = @{
-            "Authorization" = "Bearer $env:GITHUB_TOKEN"
-            "Content-Type" = "application/json"
-          }
-          $body = @{
-            title = "Test Failure"
-            body = "Tests failed. Check the test results."
-            labels = @("pytest", "test-failure")
-          } | ConvertTo-Json
-
-          Invoke-RestMethod -Uri $url -Headers $headers -Method Post -Body $body
+        run: python create_issue.py
