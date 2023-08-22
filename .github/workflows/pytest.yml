@@ -46,11 +46,5 @@ jobs:
             labels = @("pytest")
           } | ConvertTo-Json
           
-          if ($env:RUNNER_OS -eq "Linux") {
-            # Use curl or another suitable tool for Linux
-            # Add the Linux-specific code here
-            curl -X POST -H "${headers[0]}" -H "${headers[1]}" -d "$body" "$url"
+          Invoke-RestMethod -Uri $url -Headers $headers -Method Post -Body $body
 
-          } elseif ($env:RUNNER_OS -eq "Windows") {
-            Invoke-RestMethod -Uri $url -Headers $headers -Method Post -Body $body
-          }
