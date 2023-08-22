@@ -31,14 +31,14 @@ jobs:
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: |
           pip install -r requirements.txt
-
+      # - name: Install requests module
+      #   run: |
+      #     pip install requests
       - name: Run test suite
         run: |
           pytest
 
-      - name: Install requests module
-        run: |
-          pip install requests
+      
       
       - name: Create GitHub Issue on Test Failure
         if: ${{ failure() }}
