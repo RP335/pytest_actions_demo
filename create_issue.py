@@ -1,6 +1,5 @@
 import requests
 import os
-import sys
 
 def create_github_issue(title, body, labels):
     url = f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/issues"
@@ -18,12 +17,6 @@ def create_github_issue(title, body, labels):
     return response
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: create_issue.py <GITHUB_TOKEN>")
-        sys.exit(1)
-    
-    github_token = sys.argv[1]
-    
     title = "Test Failure"
     body = "Tests failed. Check the test results."
     labels = ["pytest", "test-failure"]
