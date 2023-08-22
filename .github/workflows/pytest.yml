@@ -42,4 +42,4 @@ jobs:
       
       - name: Create GitHub Issue on Test Failure
         if: ${{ failure() }}
-        run: python create_issue.py
+        run: python create_issue.py ${{ secrets.GITHUB_TOKEN }}
