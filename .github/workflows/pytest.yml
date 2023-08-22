@@ -1,5 +1,8 @@
 name: PyTest
-on: push
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   test:
@@ -10,7 +13,6 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
 
-      # Setup Python (faster than using Python container)
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
@@ -29,11 +31,12 @@ jobs:
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: |
           pip install -r requirements.txt
+
       - name: Run test suite
         run: |
           pytest
-
-      - name: Create GitHub Issue
+      - name: Create GitHub Issue on Test Failure
+        if: ${{ failure() }}
         run: |
           $url = "https://api.github.com/repos/${{ github.repository }}/issues"
           $headers = @{
@@ -41,10 +44,9 @@ jobs:
             "Content-Type" = "application/json"
           }
           $body = @{
-            title = "Test Results"
-            body = "Test results are available."
-            labels = @("pytest")
+            title = "Test Failure"
+            body = "Tests failed. Check the test results."
+            labels = @("pytest", "test-failure")
           } | ConvertTo-Json
-          
-          Invoke-RestMethod -Uri $url -Headers $headers -Method Post -Body $body
 
+          Invoke-RestMethod -Uri $url -Headers $headers -Method Post -Body $body
